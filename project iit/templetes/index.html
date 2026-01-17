@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Content Recommendation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .navbar a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .search-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        
+        .search-card form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-card input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .search-card input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .search-card button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .search-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .search-card button:active {
+            transform: translateY(0);
+        }
+        
+        .recommendations {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .recommendation-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .rec-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .rec-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .rec-category {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .rec-score {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .no-results {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            color: #999;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+        
+        .empty-state p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .search-card {
+                padding: 20px;
+            }
+            
+            .search-card form {
+                flex-direction: column;
+            }
+            
+            .search-card input,
+            .search-card button {
+                width: 100%;
+            }
+            
+            .recommendation-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .rec-score {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div style="font-weight: bold; color: #667eea; font-size: 1.2em;">📚 Content Recommender</div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <a href="/">🏠 Search</a>
+                <a href="/history">📜 History</a>
+                <a href="/admin">⚙️ Admin</a>
+                <a href="/analytics">📊 Analytics</a>
+            </div>
+        </div>
+        
+        <div class="header">
+            <h1>🔍 Smart Recommendations</h1>
+            <p>Discover content tailored to your interests</p>
+        </div>
+        
+        <div class="search-card">
+            <form method="POST">
+                <input type="text" name="query" placeholder="Search topics... (e.g., AI, learning, technology)" required autofocus>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        {% if recommendations %}
+            <div class="recommendations">
+                <h2 style="color: white; margin-bottom: 20px;">Top Recommendations:</h2>
+                {% for rec in recommendations %}
+                    <div class="recommendation-card">
+                        <div class="rec-content">
+                            <div class="rec-title">{{ rec.title }}</div>
+                            <span class="rec-category">{{ rec.category }}</span>
+                        </div>
+                        <div class="rec-score">
+                            <div class="score-circle">{{ rec.score }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>👋 Start by searching for a topic to get personalized recommendations!</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
